@@ -90,6 +90,7 @@ function init()
 
 function render()
 {
+
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     theta += (direction ? 0.1 : -0.1);
@@ -98,6 +99,6 @@ function render()
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
     setTimeout(
-        function (){requestAnimationFrame(render);}, delay
+        function (){requestAnimationFrame(render);}, 1000
     );
 }

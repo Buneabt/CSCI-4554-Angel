@@ -3,7 +3,7 @@
 var gl;
 var positions =[];
 
-var numPositions = 5000;
+var numPositions = 100000;
 init();
 
 function init()
