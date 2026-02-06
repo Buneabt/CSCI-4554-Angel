@@ -2,6 +2,7 @@
 
 var canvas;
 var gl;
+var speed = 1;
 
 var theta = 0;
 var thetaLoc;
@@ -13,6 +14,10 @@ init();
 
 function init()
 {
+    document.getElementById("slider").onchange = function(event) {
+        speed = 1000/event.target.value;
+    };
+
     canvas = document.getElementById( "gl-canvas" );
 
     gl = canvas.getContext('webgl2');
@@ -30,9 +35,11 @@ function init()
     gl.useProgram(program);
 
     var vertices = [
-        vec2(1,0),
-        vec2(0, 1),
-        vec2(0.5, 0)
+        vec2(0,0.4),
+        vec2(0,0),
+        vec2(0.2,-0.4),
+        vec2(0, 0),
+        vec2(-0.2,-0.4)
     ];
 
 
@@ -71,10 +78,16 @@ function render() {
     //We pass four variables (our array) instead of the 1 above
     gl.uniform4fv(changing_colors, color);
 
-    gl.drawArrays(gl.LINES, 0, 2);
+    //This one draws our handle
+    gl.drawArrays(gl.LINE_STRIP, 0,2);
+    //This handles the V shape
+    gl.drawArrays(gl.LINE_STRIP, 2,3);
 
 
 
     //Taking the setTimeout function we can set an actual consistent Delay, 1000ms = 1fps
-    //setTimeout(function() {requestAnimationFrame(render);}, 1000);
+
+    //REMEMBER TO UNCOMMENT BELOW WHEN SUBMITTING
+
+    setTimeout(function() {requestAnimationFrame(render);}, speed);
 }
