@@ -2,7 +2,7 @@
 
 var canvas;
 var gl;
-var speed = 1;
+var speed = 1000;
 
 var theta = 0;
 var thetaLoc;
