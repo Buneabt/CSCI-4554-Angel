@@ -2,7 +2,7 @@
 
 var canvas;
 var gl;
-var speed = 1000;
+var speed = 1;
 
 var theta = 0;
 var thetaLoc;
@@ -15,7 +15,7 @@ init();
 function init()
 {
     document.getElementById("slider").onchange = function(event) {
-        speed = 1000/event.target.value;
+        speed = event.target.value;
     };
 
     canvas = document.getElementById( "gl-canvas" );
@@ -72,7 +72,8 @@ function render() {
 
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    theta += .06;
+    theta += .06*(1/speed);
+
     gl.uniform1f(thetaLoc, theta);
 
     //We pass four variables (our array) instead of the 1 above
@@ -89,5 +90,5 @@ function render() {
 
     //REMEMBER TO UNCOMMENT BELOW WHEN SUBMITTING
 
-    setTimeout(function() {requestAnimationFrame(render);}, speed);
+    setTimeout(function() {requestAnimationFrame(render);}, 1000/speed);
 }
