@@ -14,6 +14,7 @@ init();
 
 function init()
 {
+    //Our event marker for the slider
     document.getElementById("slider").onchange = function(event) {
         speed = event.target.value;
     };
@@ -34,6 +35,8 @@ function init()
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
 
+
+    // Our extra lines, ordered this way for easy connection later on
     var vertices = [
         vec2(0,0.4),
         vec2(0,0),
