@@ -10,6 +10,10 @@ var thetaLoc;
 var changing_colors;
 var color = [0,0,0,1]; // Last thing of vec4 is transparency 
 
+
+// Added based on professors comment to link rotations to time in between renders
+var previousTime = performance.now();
+
 init();
 
 function init()
@@ -68,6 +72,14 @@ function init()
 
 
 function render() {
+
+    //Our time between render operations because setTimeout() apparently SUCKS at high FPS
+    const currentTime = performance.now();
+    var differnece = (currentTime - previousTime)/1000;
+
+    previousTime = currentTime;
+
+
     color[0] = Math.random();
     color[1] = Math.random();
     color[2] = Math.random();
@@ -75,7 +87,13 @@ function render() {
 
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    theta += .06*(1/speed);
+
+    //A full rotation is 2*pi and not (3.6 or 360 degrees) since we are using 
+    //sunisidual waves to map. Therefor it to map it to speed its 2 * 3.1415/60
+
+
+
+    theta += (2*3.1415)/60*(differnece);
 
     gl.uniform1f(thetaLoc, theta);
 
