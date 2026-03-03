@@ -69,16 +69,16 @@ function init()
 function render() {
 
     if (shake == true) {
-        if (scounter <= 60) { //Train entering the station
+        if (scounter <= 75) { //Train entering the station
             alpha*=-1;
             scounter++;
             train_distance += 0.05;
         }
-        else if (scounter > 60 & scounter <= 125) { //Our Station Pause (here will open doors?)
+        else if (scounter > 75 & scounter <= 130) { //Our Station Pause (here will open doors?)
             //Here the train will pause for a few seconds then go again 
             scounter++;
         }
-        else if (scounter > 125 & scounter <= 200) { //Train leaving the station
+        else if (scounter > 130 & scounter <= 260) { //Train leaving the station
             //Here the train will pause for a few seconds then go again 
             scounter++;
             alpha*=-1;
@@ -98,7 +98,7 @@ function render() {
 
     shake_theta = rumble * alpha;
 
-    var colors = [ //We need one for each vertex, the bottom four represents the train r,g,b, transparency
+    var colors = [ //We need one for each vertex, the bottom eight represents the train r,g,b, transparency
         vec4(0,0,0,1),
         vec4(0,0,0,1),
         vec4(0,0,0,1),
@@ -111,10 +111,14 @@ function render() {
         vec4(0,0,0,1),
     
 
-        vec4(1,0,1,1),
-        vec4(1,0,1,1),
-        vec4(1,0,1,1),
-        vec4(1,0,1,1),
+        vec4(1,0,0,1),
+        vec4(1,0,0,1),
+        vec4(1,0,0,1),
+        vec4(1,0,0,1),
+        vec4(1,0,0,1),
+        vec4(1,0,0,1),
+        vec4(1,0,0,1),
+        vec4(1,0,0,1),
     ];
 
 
@@ -138,6 +142,11 @@ function render() {
         vec2((trainStartingx - train_distance + 0.8),0.35 + shake_theta), //11
         vec2((trainStartingx - train_distance + 0.8) , -0.3 + shake_theta), //12
         vec2((trainStartingx - train_distance),-0.3 + shake_theta), //13
+
+        vec2((trainStartingx - train_distance) + 0.9,0.35 + shake_theta), //14 Second Train Car
+        vec2((trainStartingx - train_distance + 1.7),0.35 + shake_theta), //15
+        vec2((trainStartingx - train_distance + 1.7), -0.3 + shake_theta), //16
+        vec2((trainStartingx - train_distance) + 0.9,-0.3 + shake_theta), //17
     ];
 
 
@@ -157,6 +166,7 @@ function render() {
     gl.drawArrays(gl.TRIANGLES, 5,3); //Triangle bottom half 2
     gl.drawArrays(gl.TRIANGLES, 7,3) //Triangle bottom half 3
     gl.drawArrays(gl.LINE_LOOP,10,4);
+    gl.drawArrays(gl.LINE_LOOP,14,4);
 
 
 
