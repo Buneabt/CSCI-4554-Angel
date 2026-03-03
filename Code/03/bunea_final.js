@@ -6,6 +6,12 @@ var rumble =0.002;
 var alpha = 1;
 var shake = false;
 var scounter = 0;
+var shake_theta; 
+
+var train_distance = 0;
+var trainStartingx = 3;
+var accel = 1; //For when the train is entering and leaving
+
 
 init();
 
@@ -45,6 +51,7 @@ function init()
     var positionLoc = gl.getAttribLocation(program, "aPosition");
     gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(positionLoc);
+    gl.enable(gl.DEPTH_TEST);
 
     render();
 };
@@ -52,29 +59,61 @@ function init()
 
 function render() {
 
-
-    // Shakes the platform to make it feel like a train is coming 
     if (shake == true) {
-        if (scounter > 100) {
+        if (scounter <= 60) { //Train entering the station
+            alpha*=-1;
+            scounter++;
+            train_distance += 0.05;
+        }
+        else if (scounter > 60 & scounter <= 150) { //Our Station Pause (here will open doors?)
+            //Here the train will pause for a few seconds then go again 
+            scounter++;
+
+
+
+        }
+        else if (scounter > 150 & scounter <= 230) { //Train leaving the station
+            //Here the train will pause for a few seconds then go again 
+            scounter++;
+            alpha*=-1;
+            scounter++;
+            train_distance += 0.05;
+
+        }
+        else {// here we reset
             shake = false;
             scounter = 0;
+            trainStartingx = 3;
+            train_distance = 0;
         }
-        alpha*=-1;
-        scounter++;
+
     }
 
+
+
+
+    shake_theta = rumble * alpha;
 
 
     // Our extra lines, ordered this way for easy connection later on
     //multiply to keep it in line for the "rumble" of the train
     var vertices = [
-        vec2(0,0),
-        vec2(-1,0.95 + rumble * alpha),
-        vec2(1,0.95 + rumble * alpha),
-        vec2(1,-0.95 + rumble * alpha),
-        vec2(-1,-0.95 + rumble * alpha),
-        vec2(-1,-1/3*0.95 + rumble * alpha),
-        vec2(1,-1/3*0.95 + rumble * alpha)
+        vec2(0,0), // 0 - Center sign will go at like y = 0.3
+        vec2(-1,0.95 + shake_theta), //1 - Top Left
+        vec2(1,0.95 + shake_theta), //2 - Top Right
+        vec2(1,-0.95 + shake_theta), //3 - Bottom Right
+        vec2(-1,-0.95 + shake_theta), //4 - Bottom Left
+        vec2(0, -0.63333 + shake_theta), //5 - Some quick math to find the center of the bottom box
+        vec2(-1,-1/3*0.95 + shake_theta), //6 - bottom third cutoff L 
+        vec2(1,-1/3*0.95 + shake_theta), //7 - bottom third cutoff R
+        vec2(1,-0.95 + shake_theta), //8 - Bottom Right
+        vec2(-1,-0.95 + shake_theta), //9 - Bottom Left
+
+        //Basic train movement vectors
+        vec2((trainStartingx - train_distance),0.35 + shake_theta), //10 Train of length 0.6 which is 0.6/2 the length of the display 
+        vec2((trainStartingx - train_distance + 0.8),0.35 + shake_theta), //11
+        vec2((trainStartingx - train_distance + 0.8) , -0.3 + shake_theta), //12
+        vec2((trainStartingx - train_distance),-0.3 + shake_theta), //13
     ];
 
     gl.bufferData(gl.ARRAY_BUFFER, flatten(vertices), gl.DYNAMIC_DRAW);
@@ -82,9 +121,14 @@ function render() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     //This one draws our handle
-    gl.drawArrays(gl.POINTS, 0, 1);
-    gl.drawArrays(gl.LINE_LOOP, 1,4);
-    gl.drawArrays(gl.TRIANGLES, 3,4);
+    gl.drawArrays(gl.POINTS, 0, 1); //Center 0,0
+    gl.drawArrays(gl.LINE_LOOP, 1,4); //Outer Box
+    gl.drawArrays(gl.TRIANGLES, 4, 3); //Triangle bottom half 1
+    gl.drawArrays(gl.TRIANGLES, 5,3); //Triangle bottom half 2
+    gl.drawArrays(gl.TRIANGLES, 7,3) //Triangle bottom half 3
+    gl.drawArrays(gl.LINE_LOOP,10,4);
+
+
 
     setTimeout(function() {requestAnimationFrame(render);}, 1000/30);
 }
