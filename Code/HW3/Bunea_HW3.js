@@ -10,7 +10,7 @@ var perspectiveExample2 = function() {
     
     var positionsArray = [];
     var colorsArray = [];
-    
+    // Edits
 
     // SEH is approx 58m (tompkins side, width) by 104m (rome hall side, length) by 33.5m (110 ft tall, height)
     // For (X,Y,Z) our reference will be built around the length 104m side
