@@ -13,6 +13,8 @@ Initially did vertex lighting but was really ugly showing the triangles so I siw
 
 <canvas id="gl-canvas" width="512" height="512"> </canvas>
 
+<img src = "10am.jpg" style = "width:512;height:512px;">
+
 <script id="vertex-shader" type="x-shader/x-vertex">
 #version 300 es
 
@@ -71,7 +73,7 @@ void main()
         vec4 specular = Ks * SpecularProduct;
         if (dot(L, N) < 0.0) specular = vec4(0.0, 0.0, 0.0, 1.0);
         fColor = ambient + diffuse + specular;
-        fColor.a = 1.0;
+        fColor.a = 0.85;
     } else {
         fColor = vColor;
     }
