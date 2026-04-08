@@ -5,29 +5,33 @@
 
 <body>
 
+<canvas id="gl-canvas" width="512" height="512"></canvas>
 
-<canvas id="gl-canvas" width="512" height="512"> </canvas>
+<style>
+    #gl-canvas {
+      background-image: url('Images/WMATA.png');
+    }
+</style>
 
+<div>I think my train is coming! <button id= "button">I see it!</button></div>
 
 <script id="vertex-shader" type="x-shader/x-vertex">
 #version 300 es
 
-in  vec4 aPosition;
-in  vec4 aColor;
+in vec4 aPosition;
+in vec4 aColor;
 out vec4 vColor;
 
 uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
 
-void main()
-{
-    gl_Position = uProjectionMatrix*uModelViewMatrix*aPosition;
+void main() {
+    gl_Position = uProjectionMatrix * uModelViewMatrix * aPosition;
     vColor = aColor;
 }
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">
-
 #version 300 es
 
 precision mediump float;
@@ -35,10 +39,33 @@ precision mediump float;
 in vec4 vColor;
 out vec4 fColor;
 
-void
-main()
-{
+void main() {
     fColor = vColor;
+}
+</script>
+
+<script id="platform-vertex-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+
+uniform mat4 uModelViewMatrix;
+uniform mat4 uProjectionMatrix;
+
+void main() {
+    gl_Position = uProjectionMatrix * uModelViewMatrix * aPosition;
+}
+</script>
+
+<script id="platform-fragment-shader" type="x-shader/x-fragment">
+#version 300 es
+
+precision mediump float;
+
+out vec4 fColor;
+
+void main() {
+    fColor = vec4(0.5, 0.25, 0.15, 1.0); 
 }
 </script>
 

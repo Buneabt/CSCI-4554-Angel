@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head><title>BuneaAssignment4 Lighting</title></head>
+
+<body>
+
+<p><b>Homework #4 By Bogdan Bunea</b></p>
+Initially did vertex lighting but was really ugly showing the triangles so I siwthced to fragment
+<div>Lighting: <button id= "button10am">10 am</button><button id= "button5pm">5 pm</button></div>
+
+
+
+<canvas id="gl-canvas" width="512" height="512"> </canvas>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in  vec4 aPosition;
+in  vec3 aNormal;
+in vec4 aColor;
+
+uniform mat4 ModelViewMatrix;
+uniform mat4 ProjectionMatrix;
+uniform vec4 LightPosition;
+
+out vec3 N, L, E;
+out vec4 vColor;
+
+
+void main()
+{
+    vec3 pos = -(ModelViewMatrix * aPosition).xyz;
+    vec3 light = LightPosition.xyz;
+    L = normalize(light - pos);
+    E = normalize(-pos);
+    vec4 NN = vec4(aNormal, 0);
+    N = normalize((ModelViewMatrix * NN).xyz);
+
+    vColor = aColor; 
+    gl_Position = ProjectionMatrix * ModelViewMatrix * aPosition;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+#version 300 es
+
+precision mediump float;
+
+in vec4 vColor;
+in vec3 N, L, E;
+
+uniform bool Lighting;
+uniform vec4 AmbientProduct; 
+uniform vec4 DiffuseProduct; 
+uniform vec4 SpecularProduct; 
+uniform float Shininess;
+
+out vec4 fColor;
+
+
+void main()
+{
+    if (Lighting) {
+        vec3 H = normalize(L + E);
+        vec4 ambient = AmbientProduct;
+        float Kd = max(dot(L, N), 0.0);
+        vec4 diffuse = Kd * DiffuseProduct;
+        float Ks = pow(max(dot(N, H), 0.0), Shininess);
+        vec4 specular = Ks * SpecularProduct;
+        if (dot(L, N) < 0.0) specular = vec4(0.0, 0.0, 0.0, 1.0);
+        fColor = ambient + diffuse + specular;
+        fColor.a = 1.0;
+    } else {
+        fColor = vColor;
+    }
+}   
+</script>
+
+<script src="../Common/initShaders.js"></script>
+<script src="../Common/MVnew.js"></script>
+<script src="Bunea_HW4.js"></script>
+
+</body>
+</html>
+
+
