@@ -17,22 +17,22 @@
     // Lighting Parameters
 
     //Im having trouble here because it seems no matter what value I change my lighting and material too I get pure white light
-    // Im happy with that one corner being shaded because thats how that looked this morning where the only dark spot(ish) on the building was that
+    //Im also happy with that one corner being shaded because thats how that looked this morning where the only dark spot(ish) on the building was that
 
     var lightingLoc;
 
-    var lightAmbient = vec4(0.8,0.7,0.7,1);
-    var lightDiffuse = vec4(.6,.6,.6,1);
-    var lightSpecular = vec4(0,0,0,1);
+    var lightAmbient = vec4(1,1,1,1); //Make it all uniform
+    var lightDiffuse = vec4(1,1,1,1);
+    var lightSpecular = vec4(0.1,1,0.5,1);
 
-    var lightPosition10am = vec4(-2,1,10,0); //Sun is so far away it doesnt matter
-    var lightPosition5pm = vec4(4,1,-2,0); //Basically the opposite on the x axis
+    var lightPosition10am = vec4(-1.5,1,-3,0); //Sun is so far away it doesnt matter
+    var lightPosition5pm  = vec4(1.5,5,-3,0); //Basically the opposite on the x axis
 
     //Material, its a glass wall, doesnt change
-    var materialAmbient = vec4(0.6, 0.8, 0.8, 1); //Base color
-    var materialDiffuse = vec4(0.02, 0.01, 0.01, 1); //changes light direction
+    var materialAmbient = vec4(0.8,0.7,0.4, 1); //Base color
+    var materialDiffuse = vec4(0.1,.1,.1, 1); //changes light direction
     var materialSpecular = vec4(0.1,0.1,0.1,1); //shiny (assuming windows from picture)
-    var materialShininess = 1;
+    var materialShininess = 10;
 
 
     //Normals
@@ -80,7 +80,7 @@
     //Our cube push normals
     function quad(a, b, c, d) {
 
-        var t1 = subtract(vertices[b], vertices[a]);
+        var t1 = subtract(vertices[a], vertices[b]);
         var t2 = subtract(vertices[c], vertices[b]);
         var normal = cross(t1, t2);
         normal = normalize(normal);       
@@ -153,13 +153,14 @@
         gl.clearColor(0, 0.4, 1.0, 1.0); // Making this light blue like the sky in the photo
     
         gl.enable(gl.DEPTH_TEST);
-    
+        //gl.enable(gl.CULL_FACE);
+
         //
         //  Load shaders and initialize attribute buffers
         //
         program = initShaders(gl, "vertex-shader", "fragment-shader");
         gl.useProgram(program);
-    
+
         colorCube();
         ground(0,1,2,3);
     
@@ -179,10 +180,6 @@
         gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(colorLoc);
 
-        var normalLoc = gl.getAttribLocation(program, "aNormal");
-        gl.vertexAttribPointer(normalLoc, 3, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(normalLoc);
-    
         var vBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, flatten(positionsArray), gl.STATIC_DRAW);
