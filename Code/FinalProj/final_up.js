@@ -271,6 +271,8 @@ var finalProj = function() {
     function platformEdingVerts() {
         var grey = vec4(0.6, 0.6, 0.6, 1);
         // One face (the brown), thus two triangles needed, thus three verticies. 6 total
+        //Here we have to do wrapping which I searched up how to do as the image for the platform was not long enough
+        //so repeats needed to happen
         positionsArray.push(platformEdge[0]); 
         colorsArray.push(grey);
         texCoordsArray.push(vec2(0,0));
@@ -489,7 +491,7 @@ var finalProj = function() {
 
         //Platform edge lights now have to make it flip between these two 
 
-        if (movingcounter % 100 > 75) {
+        if (movingcounter % 150 > 75) {
             gl.uniform1i(gl.getUniformLocation(program, "uUseTexture"), 4); 
             gl.uniform1i(lightingLoc, 0);
             gl.drawArrays(gl.TRIANGLES, 12, 6);
